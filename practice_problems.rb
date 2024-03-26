@@ -71,8 +71,8 @@ response = HTTParty.get('http://worldtimeapi.org/api/timezone/Europe/London')
 
 if response.success?
     response_data = JSON.parse(response.body)
-    date = response_data['datetime']  #.split('T').first
-    time = response_data['datetime']  #.split('T').last.split('.').first
+    date = response_data['datetime'].split('T').first
+    time = response_data['datetime'].split('T').last.split('.').first
 
     puts "Current time in London Europe is #{date} #{time}"
 
