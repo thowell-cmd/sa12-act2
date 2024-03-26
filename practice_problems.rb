@@ -1,6 +1,7 @@
 require 'httparty'
 require 'json'
 
+#Practice prob 1
 def get_max_starred_repo(username)
   url = "https://api.github.com/users/#{username}/repos"
   puts url
@@ -37,4 +38,45 @@ if max_starred_repo
   puts "URL: #{max_starred_repo[:url]}"
 else
   puts "No repositories found for the given username."
+end
+
+
+puts ' '
+########################################################
+#Practice prob 2
+
+response = HTTParty.get('https://api.coingecko.com/api/v3/coins/markets?vs_curr
+ency=usd')
+
+if response.success?
+    crypto = JSON.parse(response.body)
+
+    sort_crypto = crypto.sort_by { |c| -c['market_cap'] }
+
+    sort_crypto.take(5).each do |c|
+        puts "Name: #{c['name']}"
+        puts "Current Price: #{c['current_price']}"
+        puts "Market Capitalization: #{c['market_cap']}"
+        puts " "
+    end
+else
+    puts "Error: #{response.code} - #{response.message}"
+end
+
+##########################################################
+#Practice prob 3
+
+
+response = HTTParty.get('http://worldtimeapi.org/api/timezone/Europe/London')
+
+if response.success?
+    response_data = JSON.parse(response.body)
+    date = response_data['datetime']  #.split('T').first
+    time = response_data['datetime']  #.split('T').last.split('.').first
+
+    puts "Current time in London Europe is #{date} #{time}"
+
+else
+    puts "Error: #{response.code} - #{response.message}"
+
 end
