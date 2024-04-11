@@ -4,28 +4,22 @@ require 'json'
 #Practice prob 1
 def get_max_starred_repo(username)
   url = "https://api.github.com/users/#{username}/repos"
-  puts url
   response = HTTParty.get(url)
   repos = JSON.parse(response.body)
 
-  max = 0
-  max_starred_repo = nil
+  max_starred_repo = repos.max_by { |repo| repo['stargazers_count'] }
 
-  repos.each do |repo|
-    name = repo['name']
-    description = repo['description']
-    num_stars = repo['stargazers_count']
-    url = repo['html_url']
-
-    if num_stars > max
-      max = num_stars
-      max_starred_repo = { name: name, description: description, stars: stars, url: url }
-    end
+  if max_starred_repo
+    { 
+      name: max_starred_repo['name'], 
+      description: max_starred_repo['description'], 
+      stars: max_starred_repo['stargazers_count'], 
+      url: max_starred_repo['html_url'] 
+    }
+  else
+    nil
   end
-
-  max_starred_repo
 end
-
 
 username = 'thowell-cmd'
 max_starred_repo = get_max_starred_repo(username)
